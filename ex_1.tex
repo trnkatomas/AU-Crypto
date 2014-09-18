@@ -1,0 +1,178 @@
+% author: Tomas Trnka
+% mail: tomas@trnkatomas.eu
+% date: 2013-07-04
+
+\documentclass[a4paper,10pt]{article}
+%\usepackage[czech]{babel}
+%\usepackage[T1]{fontenc}
+\usepackage[hmargin=2.2cm,vmargin=2.2cm]{geometry}
+\usepackage[utf8x]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{fancyvrb}
+\usepackage{amsmath} 
+\usepackage{float}
+\usepackage{enumerate}
+\usepackage{tikz}
+\usepackage{hyperref}
+\pagestyle{fancy}
+\headheight 15pt
+\lhead{Crpyto, Fall 2014}
+\rhead{Tomas Trnka}
+\newcommand{\set}[1]{\ensuremath{\left\lbrace #1 \right\rbrace}}
+\newcommand{\role}[1]{\ensuremath{\left\langle #1 \right\rangle}}
+\newcommand{\cara}{\begin{center}\rule{140mm}{.2mm}\end{center}}
+\newcommand{\mI}{\ensuremath{^\mathcal{I}}}
+\newcommand{\Tbox}[1]{\ensuremath{\mathcal{T}}-Box#1}
+\newcommand{\Abox}[1]{\ensuremath{\mathcal{A}}-Box#1}
+\newcommand{\mC}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\Tc}{\ensuremath{\mathcal{T}_c}}
+\newcommand{\qb}[1]{\ensuremath{\vert{#1}\rangle}}
+\begin{document}
+\section*{Exercise 1 -- Affine cipher}
+Our task is to break affine cipher. The first step, that we have to make is to analyse frequencies of the letters in the encrypted text:
+\begin{figure}[h]
+\centering
+\begin{BVerbatim}
+KQEREJEBCPPCJCRKIEACUZBKRVPKRBCIBQCARBJCVFCUP
+KRIOFKPACUZQEPBKRXPEIIEABDKPBCPFCDCCAFIEABDKP
+BCPFEQPKAZBKRHAIBKAPCCIBURCCDKDCCJCIDFUIXPAFF
+ERBICZDFKABICBBENEFCUPJCVKABPCYDCCDPKBCOCPERK
+IVKSCPICBRKIJPKABI
+\end{BVerbatim}
+\end{figure}
+
+\noindent
+The following frequencies shown in figure \ref{fig:freq} were observed, we sorted them in decreasing order and from the plot it is quite visible that the distribution is not uniform which is expected for affine cipher.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.8]{freq.png}
+\caption{Frequencies of letters}
+\label{fig:freq}
+\end{figure}
+
+\noindent
+The most frequent letter in a English alphabet is E, so we can assume based on the frequency analysis that E is encrypted to C.
+Now we have to guess to what letter is the second most common letter encrypted in order to obtain the second equation needed for breaking affine cipher. The second most common letter in English is T, in our cipher text, there are two letters with the same second highest frequency, so we probably would have to try both of them.
+
+\bigskip
+\noindent
+First let assume that T is encrypted to B.
+
+\bigskip
+\noindent
+Because the encryption formula is in form $E(x) = (a*x + b) mod 26$, we have two variables $a$ and $b$ and thus we have to form two of these equations to be able to break the cipher. This system of equations for our guess that $E(E) = C$ and $E(T) = B$ can be solved just by subtracting one equation form the other.
+
+\begin{eqnarray*}
+a * 4 + b &=& 2\\
+a * 19 + b &=& 1\\
+\cline{1-3}
+-15*a &=& 1 \\
+11*a &=& 1
+\end{eqnarray*}
+
+\noindent
+We can solve the result with help of Bézout's identity which is basically extended Euclid algorithm that can tell us how we can obtain smallest $d$ in form $ ax + by = d$ and the coefficients $a$ and $b$ for such equation. In our case the $y$ is 26 and we would like have to know whether the $d$ is 1 as we would like to have it. If so then the coefficient $a$ is desired modulo inverse (for more convenient computations let's map the characters to number from 0 to 26 in an alphabetical order).
+
+\noindent
+But unfortunately we are not able to find such an a that has inverse in $Z_{26}$. So we have to continue trying the other possibilities.
+
+\bigskip
+\noindent
+The second letter with number of occurrences of 20 is P.
+Now the equations are slightly different:
+\begin{eqnarray*}
+a * 4 + b &=& 2\\
+a * 19 + b &=& 10\\
+\cline{1-3}
+-15*a &=& -8\\
+11*a &=& 18
+\end{eqnarray*}
+
+\noindent
+Now we have to rearrange the equation into form $11*a - 18*c = 1$ to obtain modulo inverse for $a$ with Bézout's identity. The result is $a=19$ and afterwards we can substitute into the first equation to obtain $b=(2 - 19*4) mod 26=4$. Then when we have to compute the original text. We just have to derive formula for decrypting, which is $x = (E(x) -  b)* a^{-1} mod 26$.
+
+\noindent
+After decryption of the cipher text we obtain following plain text which is a Canadian national anthem and split to human readable looks like:
+\begin{figure}[h]
+\centering
+\begin{BVerbatim}
+O~CANADA TERRE DE NOS AIEUX TON FRONT EST CEINT
+DE FLEURONS GLORIEUX CAR TON BRASS AIT PORTER 
+LEPEE IL SAIT PORTER LA CROIX TON HISTOIRE EST
+UNE EPOPEE DES PLUS BRILLANTS EXPLOITS ET TA 
+VALEUR DE FOI TREMPEE PROTEGERA NOS
+FOYERS ET NOS DROITS
+\end{BVerbatim}
+\end{figure}
+
+\section*{Exercise 1 -- Unknown cipher}
+Our task is to break unknown cipher. The first step, that we should make is to analyse frequencies of the letters in the encrypted text:
+\begin{figure}[h]
+\centering
+\begin{BVerbatim}
+BNVSNSIHQCEELSSKKYERIFJKXUMBGYKAMQLJTYAVFBKVT
+DVBPVVRJYYLAOKYMPQSCGDLFSRLLPROYGESEBUUALRWXM
+MASAZLGLEDFJBZAVVPXWICGJXASCBYEHOSNMULKCEAHTQ
+OKMFLEBKFXLRRFDTZXCIWBJSICBGAWDVYDHAVFJXZIBKC
+GJIWEAHTTOEWTUHKRQVVRGZBXYIREMMASCSPBNLHJMBLR
+FFJELHWEYLWISTFVVYFJCMHYUYRUFSFMGESIGRLWALSWM
+NUHSIMYYITCCQPZSICEHBCCMZFEGVJYOCDEMMPGHVAAUM
+ELCMOEHVLTIPSUYILVGFLMVWDVYDBTHFRAYISYSGKVSUU
+HYHGGCKTMBLRX
+\end{BVerbatim}
+\end{figure}
+
+\noindent
+The following frequencies shown in figure \ref{fig:freq_u} were observed, we sorted them in decreasing order and from the plot I~would guess that this histogram is quite uniform and therefore the plain text was encrypted with Vigenère cipher. I~also compared the histogram to another one that was constructed from the text encrypted with Vigenère cipher and they were almost the same. So we were trying to break Vigenère cipher.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.8]{freq_u.png}
+\caption{Frequencies of letters}
+\label{fig:freq_u}
+\end{figure}
+
+\noindent
+The next step was to guess the length of keyword. I~used the method based on sums of probabilities of occurrences for the letters. We were looking for which length of keyword the probabilities in all columns are most similar to the plain text sum of probabilities of occurrences.\\
+The results are presented in table \ref{tab:sf}.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+keyword l. & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ \hline
+1 & 0.041 &&&&&&&&&\\ \hline
+2 & 0.044 & 0.046 &&&&&&&&\\ \hline
+3 & 0.044 & 0.048 & 0.048 &&&&&&&\\ \hline
+4 & 0.043 & 0.056 & 0.047 & 0.048 &&&&&&\\ \hline
+5 & 0.045 & 0.043 & 0.040 & 0.043 & 0.037 &&&&&\\ \hline
+6 & 0.051 & 0.061 & 0.055 & 0.071 & 0.056 & 0.070 &&&&\\ \hline
+7 & 0.040 & 0.045 & 0.044 & 0.038 & 0.046 & 0.033 & 0.046 &&&\\ \hline
+8 & 0.058 & 0.056 & 0.051 & 0.046 & 0.038 & 0.065 & 0.046 & 0.050 &&\\ \hline
+9 & 0.046 & 0.045 & 0.042 & 0.036 & 0.040 & 0.040 & 0.043 & 0.045 & 0.062 & \\ \hline
+10 & 0.065 & 0.041 & 0.024 & 0.047 & 0.041 & 0.041 & 0.054 & 0.047 & 0.053 & 0.051 \\ \hline
+\end{tabular}
+\caption{Sums of probabilities over two of letters}
+\label{tab:sf}
+\end{table}
+
+
+\noindent
+The most promising value of keyword size seems to be equal to 6. Then I~used the trick from the book, for the shift in every column. We compute the probabilities
+\begin{equation*}
+M_g = \sum_{i=0}^{25} \frac{p_i*f_{i+g}}{n'}
+\end{equation*}
+where $p_i$ is probability of occurrence of letter in normal text, $f_i$ is frequency of letter in $i$-th column, $g$ is shift and  $n'$ is "length" of column. Basically is the same trick as before, we were looking for such $g$ for which sum of probabilities of letters are the highest. Such $]$ is most likely one letter of a keyword. It showed up that the best shifts for columns are [19, 7, 4, 14, 17, 24] respectively which is expressed with letters \texttt{THEORY}. When we use this keyword to decipher our unknown cipher text we obtain correct result:
+\begin{figure}[H]
+\centering
+\begin{BVerbatim}
+I~GREW UP AMONG SLOW TALKERS MEN IN PARTICULAR WHO DROPPED WORDS A~FEW AT A~TIME LIKE
+BEANS IN A~HILL AND WHEN I~GOT TO MINNEAPOLIS WHERE PEOPLE TOOK A~LAKE WOBEGON COMMA TO
+MEAN THE END OF A~STORY I~COULDNT SPEAK A~WHOLE SENTENCE IN COMPANY AND WAS CONSIDERED
+NOT TOO BRIGHT SO I~ENROLLED IN A~SPEECH COURSE TAUGHT BY ORVIL LESAND THE FOUNDER
+OF REFLEXIVE RELAXOLOGY A~SELF HYPNOTIC TECHNIQUE THAT ENABLED A~PERSON TO SPEAK
+UP TO THREE HUNDRED WORDS PER MINUTE
+\end{BVerbatim}
+\end{figure}
+\end{document}

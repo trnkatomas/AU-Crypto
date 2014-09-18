@@ -1,0 +1,37 @@
+% author: Tomas Trnka
+% mail: tomas@trnkatomas.eu
+% date: 2013-07-04
+
+\documentclass[a4paper,10pt]{article}
+%\usepackage[czech]{babel}
+%\usepackage[T1]{fontenc}
+\usepackage[hmargin=2.2cm,vmargin=2.2cm]{geometry}
+\usepackage[utf8x]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{amsmath} 
+\usepackage{enumerate}
+\pagestyle{fancy}
+\headheight 15pt
+\lhead{Crpyto, Fall 2014}
+\rhead{Tomas Trnka}
+\begin{document}
+\section*{Wheel of fortune}
+\begin{enumerate}[a)]
+\item
+We are supposed to compute the average amount of bits of information we can obtain for one letter with a probability $p_i$  in a word of length $N$. I~think that formula for the average information for letter number $i$ as a function of $p_i$ an $N$ look as follows (for integer value of bits we have to take the bigger consecutive integer):
+$$
+ p_i \cdot N \cdot \log\left(\frac{1}{p_i}\right) + (1-p_i)\cdot N \cdot \log\left(\frac{1}{1-p_i}\right)
+$$
+
+Because we know the probabilities and the length of the string we can assume that we obtain in average amount equal to the first part of equation information that letter $i$ is in the word and likewise the other half stands for the information that letter $i$ is not in the word. The rest of the function are only formulas for computing how many bits we can get from a letter with the particular probability.
+
+\item Let's examine several possibilities of guessing the letters. When we are guessing the most probable letter we are obtaining the most information about the word. In other cases (with the least probable letters) we just ensure ourselves most of the time that guessed letter is indeed not in the word. 
+
+I~think that is completely OK to try the most probable letter as a first guess. But guessing the next most probable letter needn't to be the best try. Because there is quite big probability that we obtain some information that can be more useful and carry more information than simply continue the guessing according to the probabilities.
+We can from the pattern of already discovered letters sometimes derive some information. The "shape" of the pattern can help us prune the amount of possibilities, e.g. two consecutive "EE" or some other pattern that can be significant for the words in the examined language.
+
+There are also other options. When we are guessing only according to the probabilities we basically assume that the letters are independent, which they are indeed not. So when we discovered some letters we can also rely on probabilities of digrams or trigrams -- these statistical patters can be more informative then only the single letters or even their combination (as a new random variable).
+
+But in case that we can not conclude anything from what we know in current situation I~assume that the most reasonable option is to continue guessing according to the single letter probabilities.
+\end{enumerate}
+\end{document}
