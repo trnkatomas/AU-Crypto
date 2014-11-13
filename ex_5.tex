@@ -1,0 +1,58 @@
+% author: Tomas Trnka
+% mail: tomas@trnkatomas.eu
+% date: 2013-07-04
+
+\documentclass[a4paper,10pt]{article}
+%\usepackage[czech]{babel}
+%\usepackage[T1]{fontenc}
+\usepackage[hmargin=2.2cm,vmargin=2.2cm]{geometry}
+\usepackage[utf8x]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{amsmath} 
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+\usepackage{enumerate}
+\pagestyle{fancy}
+\headheight 15pt
+\lhead{Crpyto, Fall 2014}
+\rhead{Tomas Trnka}
+\def\firstcircle{(270:1.75cm) circle (2.5cm)}
+\def\secondcircle{(150:1.75cm) circle (2.5cm)}
+\def\thirdcircle{(30:1.75cm) circle (2.5cm)}
+\begin{document}
+\section*{Cryptosystem notes, exercise 1}
+\begin{enumerate}[a)]
+\item For the first bullet we have to consider that the adversary is talking to the real world block cipher. For this case we don't have to consider number of blocks, number of bits in every block. The only thing we care about is the length of the key we encrypting with. Because the key has length $k$-bits there is 
+$$
+\frac{1}{2^k}
+$$
+possibilities how to construct this key. But out adversary is allowed to ask $m$-times so we can conclude that the probability will be
+$$
+\frac{m}{2^k}
+$$
+
+\item
+For the random function we are not concern about the key, because the real random number does not depend on it. The only think that we have to into account is the length of generated sequence, the length of such sequence is
+$$
+n\cdot T
+$$
+and than we can compute the probability after $m$ trials as
+$$
+\frac{m}{2^{n\cdot T}}
+$$
+
+\item The next task is to computed values are lower bound and a upper bound respectively.
+The formula for the advantage  of the adversary is
+$$
+Adv = \vert Pr(A=1,real) - Pr(A=1,ideal) \vert
+$$
+But for the real situation we can only get better than simply guessing the key by brute force. So the $\frac{m}{2^k}$ is lower bound for the probability - we can only improve it. I'm quite convinced that against ideal world random function we can get any better than simply guess the output. There the suggested value it lower and upper bound. And since we can improve only the lower bound the advantage of the adversary can be only higher. Because when we able to find attack than it is better then brute force the first element of equation will grow. From this reason the Advantage is at least $\frac{m}{2^k} - \frac{m}{2^{n\cdot T}}$.
+
+\item 
+For fulfil the requirements we have to realize what does it means that the claim is false. We have to have such small $\varepsilon$ that we will not be able to 'fit in' the appropriate value of the advantage for the adversary. This interval should span from zero, which is the advantage for the case of perfect secrecy to the lowest possible value for Adv. But from the previous bullets we can say that we have the lower bound for the advantage. So the interval will be
+$$
+\left\langle 0, \frac{m}{2^k} - \frac{m}{2^{n\cdot T}}\right)
+$$
+\end{enumerate}
+\end{document}

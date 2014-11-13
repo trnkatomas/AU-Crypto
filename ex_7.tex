@@ -1,0 +1,89 @@
+% author: Tomas Trnka
+% mail: tomas@trnkatomas.eu
+% date: 2013-07-04
+
+\documentclass[a4paper,10pt]{article}
+%\usepackage[czech]{babel}
+%\usepackage[T1]{fontenc}
+\usepackage[hmargin=2.2cm,vmargin=2.2cm]{geometry}
+\usepackage[utf8x]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{amsmath} 
+\usepackage{dsfont}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+\usepackage{enumerate}
+\pagestyle{fancy}
+\headheight 15pt
+\lhead{Crpyto, Fall 2014}
+\rhead{Tomas Trnka}
+\def\firstcircle{(270:1.75cm) circle (2.5cm)}
+\def\secondcircle{(150:1.75cm) circle (2.5cm)}
+\def\thirdcircle{(30:1.75cm) circle (2.5cm)}
+\begin{document}
+\section*{RSA probability breaking -- Exercise 7}
+\begin{enumerate}[a)]
+\item 
+Let's start with the simpler case when $z$ belong to the $\mathds{Z}_N$, but not $\mathds{Z}_N^*$.
+
+When this is true, we can say about $z$ that it has not inverse in $\mathds{Z}_N$, which means that
+$$
+gcd(z, n) = x, x \neq 1
+$$
+
+But when we know the divider of $n$ we are done, because
+$n = p\cdot q$
+where $p$ and $q$ are primes. Therefore our $x$ must be either $q$ or $p$. We can simply choose which one $x$ stands for and compute the other one. With both prime numbers that divide $n$ we can compute $d$ as
+$$
+e^{-1} \equiv d \mod \varphi(n) \equiv d \mod (p-1)(q-1)
+$$
+When we have the $d$ we can decode the cryptotext $z$ just as $c = z^d$.
+
+\item 
+The second part of the algorithm $B$ is that we have to incorporate the algorithm $A$.
+\begin{enumerate}[I)]
+\item We can get lucky and have $z$ from the desired set $S$. In that case we can put all inputs of $B$ into $A$ and obtain the correct answer. 
+\item 
+
+In case that the $A$ returns no answer we have to use the Multiplicative property of RSA according to Stinson
+$$
+e_k(x_1)e_k(x_2) \mod n = e_k(x_1x_2) \mod n
+$$
+This could help us to not obtain zero probability of getting correct answers from $A$ in case that $z \notin S$.
+%
+%\begin{center}
+%\hrule
+%Go and see, there is quite OK explanation:
+%\href{http://en.wikipedia.org/wiki/RSA_(cryptosystem)#Padding}{http://en.wikipedia.org/wiki/RSA\_(cryptosystem)\#Padding}
+%\hrule
+%\end{center}
+
+We simply generate some new plain text $x$, then we encrypt it with known key $e$ as a
+$$
+e_k(x) = x^e = y
+$$
+When we generate the new $x$ we have got the exact probability $\varepsilon$ that it will form the set $S$ because we are choosing uniformly in the worst case from $\mathds{Z}_N^*$ which is $\frac{\varepsilon(p-1)(q-1)}{(p-1)(q-1)}$.
+
+Then we can construct from know $z$ left part of equation for the multiplicative property as $$
+z\cdot e_k(x) \mod n = z\cdot y \mod n
+$$
+
+Then we have obtained new crypto text, that we can try to put it into algorithm $A$. If it gives us correct answer, we know have obtained $x\cdot c$, where $c$ was the original crypto text, that we was looking for. 
+\end{enumerate}
+
+\item At the end let's take a closer look at the probabilities. We can have these prior probabilities of choosing one of the three cases sketched before:
+$$
+Pr = \left\{
+  \begin{array}{lr}
+    \frac{|\mathds{Z}_N|-|\mathds{Z}_N^*|}{|\mathds{Z}_N|} & : \text{if }z\text{ belongs to the }\mathds{Z}_N/ \mathds{Z}_n^*\\
+    \frac{|S|}{|\mathds{Z}_N^*|} & : \text{if }z\text{ belongs to the }S\\
+    \frac{|\mathds{Z}_N^*|-|S|}{|\mathds{Z}_N^*|} & : \text{if }z\text{ does not belongs to the }S\\
+  \end{array}
+\right.
+$$
+
+For the two first prior probabilities we've got probability of one to decocde the ciphertext. For the third one we have the probability $\varepsilon$ to get lucky and choose the new $x$ from $S$. The if we multiply the probabilities with their prior we certainly obtain probability bigger than $\varepsilon$.
+\end{enumerate}
+\end{document}

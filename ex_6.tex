@@ -1,0 +1,92 @@
+% author: Tomas Trnka
+% mail: tomas@trnkatomas.eu
+% date: 2013-07-04
+
+\documentclass[a4paper,10pt]{article}
+%\usepackage[czech]{babel}
+%\usepackage[T1]{fontenc}
+\usepackage[hmargin=2.2cm,vmargin=2.2cm]{geometry}
+\usepackage[utf8x]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{amsmath} 
+\usepackage{dsfont}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+\usepackage{enumerate}
+\pagestyle{fancy}
+\headheight 15pt
+\lhead{Crpyto, Fall 2014}
+\rhead{Tomas Trnka}
+\def\firstcircle{(270:1.75cm) circle (2.5cm)}
+\def\secondcircle{(150:1.75cm) circle (2.5cm)}
+\def\thirdcircle{(30:1.75cm) circle (2.5cm)}
+\begin{document}
+\section*{Public cryptography -- Exercise 6}
+The goal of the assignment is to prove that the nice property that holds for $\mathds{Z}^*_N$ 
+$$
+D(E(m)^d) = D(m^{e^d}) = D(m^{ed}) = m
+$$
+is also true in noncyclic group $\mathds{Z}_N$.
+
+\noindent
+From the Stinsons's book we know that:
+$$
+\begin{array}{c}
+n = pq\\
+p,q\text{ are primes and } p \neq q\\
+ab \equiv 1 \mod (p-1)(q-1)\\
+e(x) \equiv x^b \mod n\\
+d(y) \equiv x^a \mod n\\
+\text{and the results following from the Chineese reminder teorem}\\
+x_1 \equiv x_2 \mod (pq) \leftrightarrow (x_1 \equiv x_2 \mod p \wedge x_1 \equiv x_2 \mod q)
+\end{array}
+$$
+
+\noindent
+While decoding we would like to obtain:
+$$
+d(y) \equiv d(e(x)^a) \equiv x^{b^a} \equiv x \mod n\\
+$$
+
+\noindent
+But even in the $\mathds{Z}_N$ world holds that:
+$$
+x^{ab} = x^{1+k(p-1)(q-1)}
+$$
+because the number $p$, $q$ are primes. Now we have to decide which one from the $p$ and $q$ will be divider of the $x$. We can assume that the $q$ will be divider.
+
+\noindent
+Let's examine the part for the $p$:
+$$
+\begin{array}{c}
+x^{ab} \equiv x^{1+k(p-1)(q-1)}\\
+x^{1+k(p-1)(q-1)} \equiv x \cdot \left( x^{(p-1)} \right) ^{k(q-1)}\\
+\end{array}
+$$
+And since the $p$ is a prime we can derive from the Fermat little theorem that:
+$$
+x \cdot \left( x^{(p-1)} \right) ^{k(q-1)} \equiv x \cdot 1^{k(q-1)} \mod p
+$$
+So we have successfully proved that 
+$$
+x^{b^a} \equiv x \mod p\\
+$$
+
+\noindent
+The next part is even easier, if $x$ is divisible by $q$ then must hold that:
+$$
+x \mod q \equiv 0
+$$
+
+\noindent
+The result of previous equation is that:
+$$
+x^{ab} \equiv 0^{ab} \equiv 0 \mod q
+$$
+
+\noindent
+We have proved that $x_1 \equiv x_2 \mod p$ is true and $x_1 \equiv x_2 \mod q$ alike. Therefore the conditions for the $x_1 \equiv x_2 \mod (pq)$ hold and we can claim that the nice property for decryption holds also in the $\mathds{Z}_N$ world.
+%\begin{enumerate}[a)]
+%\end{enumerate}
+\end{document}

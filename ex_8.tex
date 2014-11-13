@@ -1,0 +1,95 @@
+% author: Tomas Trnka
+% mail: tomas@trnkatomas.eu
+% date: 2013-07-04
+
+\documentclass[a4paper,10pt]{article}
+%\usepackage[czech]{babel}
+%\usepackage[T1]{fontenc}
+\usepackage[hmargin=2.2cm,vmargin=2.2cm]{geometry}
+\usepackage[utf8x]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{amsmath} 
+\usepackage{dsfont}
+\usepackage{hyperref}
+\usepackage{algpseudocode}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+\usepackage{enumerate}
+\pagestyle{fancy}
+\headheight 15pt
+\lhead{Crpyto, Fall 2014}
+\rhead{Tomas Trnka}
+\def\firstcircle{(270:1.75cm) circle (2.5cm)}
+\def\secondcircle{(150:1.75cm) circle (2.5cm)}
+\def\thirdcircle{(30:1.75cm) circle (2.5cm)}
+\begin{document}
+\section*{Multiplication algorithm -- Exercise 8}
+\begin{enumerate}[a)]
+\item Showing that in every step we have multiplied $Z_i$ is straightforward when we realized what the algorithm does in the binary numeral system,
+
+\begin{enumerate}[I.]
+\item While running our algorithm the $x$ remains $1$ until we encounter the left most $1$ in the binary notation of $z$, when the first $1$ occurs $x$ becomes $a$.
+
+\item Then in every following step the $x$ is squared. It holds that $2=10_b$ in binary notation. Let's progress with a little bit untidy notation where we have $x$ in decimal and the exponent in binary.
+$$
+x^{2} = (a^{{Z_i}_b})^{10_b}
+$$
+But what happens when we multiply in binary notation by $2=10_b$? We are just shifting the whole binary number one position to the left while adding zero at the end.
+
+\item Then if the next number of the binary notation for $Z$ was zero we are done and we can skip the step $b$ and continue with looping. But if it was $1$, we have to multiply our number by another $a$.
+
+Which in binary is again:
+$$
+a^{{Z_i}_b}\cdot a^{1_b} = a^{{Z_i}_b+1}
+$$
+
+But from the previous step we know that after the step $a$ the exponent in binary notation ends with zero. So such addition just switch the last bit to $1$. We can clearly see that we have moved one position to the right in our number $z$ and we adjusted the $x$ accordingly to the last seen bit.
+\end{enumerate}
+
+\item We can expect for the $k$ iterations that we have to compute $k$-times the step $2a$. On the other hand when we assume that the bits in binary notation of $z$ are distributed randomly can expect that we have to compute step $2b$ only in half the $k$ iterations. The expected number of iterations therefore will be $k + \frac{k}{2}$.
+
+\item The algorithm can by improved by scanning for the next two consecutive bits. We have to precompute values for $a^2$ and $a^3$ before we start looping over the $Z$.
+In the step $2a$ we have to set the value for the $x$ as $x^4$, because in binary notation it would mean shifting by two positions to the left. In our new step $2b$ we have to recognize which one of the precomputed values we have to apply according to the next 2 bits. The pseudo code is as follows:
+\begin{algorithmic}
+\State $x\gets 1$
+\For{$i\gets k-1$ downto $0$ by $2$}
+\State $x\gets x^4$
+\If{$z_iz_{i-1}==11$}
+	\State $x\gets x \cdot a^3$
+\ElsIf{$z_iz_{i-1}==10$}
+	\State $x\gets x \cdot a^2$	
+\ElsIf{$z_iz_{i-1}==01$}
+	\State $x\gets x \cdot a$
+\Else
+	\State $x \gets x$ // i.e. do nothing
+\EndIf
+\EndFor
+\end{algorithmic}
+Then when we count all the multiplication we have to do the number of operations will be:
+$$
+2 + \frac{k}{2} + \frac{k}{2}\cdot\frac{3}{4}
+$$
+We have precomputed 2 values, then we have only half of the $k$ iterations and in only one from the 4 variants $b$ we do nothing.
+
+\item 
+This idea can be generalized and the general formula for scanning would be:
+$$
+(2^m-2) + \frac{k}{m} \left( 1 + \frac{2^m - 1}{2^m} \right)
+$$
+where $m$ is the number of bits that we are scanning ahead.
+
+We can clearly see that this function depends on the size of $k$. We can derive the formula by the variable $n$ and obtain:
+$$
+-\frac{k \left(2^{-n} \left(2^n-1\right)+1\right)}{n^2}+\frac{k \left(\log (2)-2^{-n} \left(2^n-1\right) \log (2)\right)}{n}+2^n \log (2)
+$$
+
+When we know the value of $k$ we can now put it into the formula, determine when the formula equals to zero and obtain the optimal value for $m$, i.e. how many bits will be optimal to precompute ahead.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.7]{example.png}
+\caption{Graph for values of $k=2000$ where optimal value of $m$ is 7}
+\end{figure}
+\end{enumerate}
+\end{document}
