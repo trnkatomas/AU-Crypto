@@ -22,7 +22,7 @@
 \begin{document}
 \section*{Entropies}
 \begin{enumerate}[a)]
-\item I~would like to solve the task with help of venn diagrams.
+\item I~decided to solve the task with help of venn diagrams.
 
 \begin{figure}[h!]
 \centering
@@ -51,8 +51,15 @@
     \end{tikzpicture}    
 \end{figure}
 
-From the picture we can see that the entropy $ H(P|C) = e + 0 $. The other entropy $H(K|C)$ is equal to $e+f$. The symbol stands for entropy $H(K|C,P)$ and as we know that entropy is always greater or equal to zero we can simply from the symbol state that $H(P|C) \leq H(K|C)$.
+From the picture we can see that the entropy $ H(P|C) = e + 0 $. The other entropy $H(K|C)$ is equal to $e+f$. The symbol $f$ stands for entropy $H(K|C,P)$ and as we know entropy is always greater or equal to zero. From this we can simply substitute and obtain the result:
+\begin{eqnarray*}
+e &=& e\\
+e + 0 &\leq & e + f\\
+H(P|C) &\leq & H(K|C)
+\end{eqnarray*}
+Therefore we can say that the we have proven that the equation is correct.
 
-\item The second task is to answer the question when holds true that $H(K|C) = H(P|C)$. To full fill this equality it is necessary that the value for $f$ is also zero. This condition hold for such ciphers that when we know both cipher text and a plain text that we can say what the key is.  Such ciphers are for example the simple shift ciphers like Caesar cipher of affine cipher.
+
+\item The second task is to answer the question when holds true that $H(K|C) = H(P|C)$. To fulfil this equality it is necessary for $f$ to be zero (we can conclude this from the equations above). This means that $H(K|P,C)=0$ that can be "translated" as when we know both cipher and plain text  we can say what the key is. This is true for rather simple ciphers like for example simple shift ciphers such as Caesar cipher of affine cipher.
 \end{enumerate}
 \end{document}

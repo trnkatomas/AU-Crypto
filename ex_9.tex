@@ -1,0 +1,57 @@
+% author: Tomas Trnka
+% mail: tomas@trnkatomas.eu
+% date: 2013-07-04
+
+\documentclass[a4paper,10pt]{article}
+%\usepackage[czech]{babel}
+%\usepackage[T1]{fontenc}
+\usepackage[hmargin=2.2cm,vmargin=2.2cm]{geometry}
+\usepackage[utf8x]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{amsmath} 
+\usepackage{amssymb} 
+\usepackage{dsfont}
+\usepackage{hyperref}
+\usepackage{algpseudocode}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+\usepackage{enumerate}
+\pagestyle{fancy}
+\headheight 15pt
+\lhead{Crpyto, Fall 2014}
+\rhead{Tomas Trnka}
+\begin{document}
+\section*{DDH and El Gamal -- Exercise 9}
+\textit{If the DDH problem is hard (w.r.t.GGen), then the El Gamal cryptosystem is CPA secure.}
+\begin{enumerate}[a)]
+\item We will prove this theorem by contradiction. Let's assume that we have an adversary that is able to gain an advantage against the El Gamal cryptosystem bigger then $\varepsilon$.
+
+
+The underlying problem of this prove is to create a polynomial reduction of
+$$
+\text{DDH} \vartriangleleft_p \text{El Gamal}
+$$
+this means that for every instance of DDH we are able to construct instance of El Gamal CPA  game that the instance for DDH is YES instance if and only if the El Gamal is YES instance. Let's in this case define YES instance as a situation that the output of both system was not random but actual output of DDH and El Gamal cryptosystem, respectively.
+
+\item 
+When the adversary have the advantage against El Gamal cryptosystem it means that we is able to decide
+$$
+Adv_A(|Pr(A\rightarrow1|real) - Pr(A\rightarrow|ideal|) \geq \varepsilon
+$$
+
+In El Gamal cryptosystem we have public key, that constist of group $G$, generator $\alpha$ and $\beta = \alpha^b$. Playing the CPA game means that the adversary is allowed to choose plaintext message and the system replies. Then the adversary have to decide whether the message was properly encoded or if the output is just random.
+
+The response of such system is $(\alpha^b, \alpha^{ab}m)$. So if the adversary is somewhat able to distinguish whether such response  from something random that basically means that he is able to verify with probability $\varepsilon$ that $\alpha^b \cdot \alpha^a = \alpha^{ab}$. But this is exactly what we need to solve the DDH. Let's create the reduction.
+
+\item For the DDH problem we know the group $G$, generator $\alpha$ and $\alpha^a$,$\alpha^b$ and $\alpha^{ab}$. For every instance of DDH defined in this way we can create El Gamal cryptosystem such as
+\begin{enumerate}[I]
+\item We will be working with the same group, just let give it another name $G'$
+\item The same situation will be with the generator: $\alpha$ becomes $\alpha'$.
+\item Let's be consistent with the standard definition and let $\beta'$ become $\alpha'^a$ which is obviously $\alpha^a$.
+\item Now we create a message, encoded it and create pair $(\alpha^b,\alpha'^{ab}m)$. This we can do simply from $\alpha^b$ and $\alpha^{ab}$.
+\item Now, when we allow our adversary play his game he is able to say with probability $\varepsilon$ if such encoded message was encrypted by El Gamal crypto system or not. When he say it was, then the answer for the DDH is also YES, if he says NO than the answer for DDH is also NO (just following the definition of reduction). All these steps require at most polynomial time so clearly the whole reduction is polynomial.
+\end{enumerate}
+\item We came to the conclusion that if such Adversary existed the DDH can not be hard, which is contradiction of our assumption and therefore we have proven the theorem.
+\end{enumerate}
+\end{document}

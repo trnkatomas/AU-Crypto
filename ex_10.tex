@@ -1,0 +1,90 @@
+% author: Tomas Trnka
+% mail: tomas@trnkatomas.eu
+% date: 2013-07-04
+
+\documentclass[a4paper,10pt]{article}
+%\usepackage[czech]{babel}
+%\usepackage[T1]{fontenc}
+\usepackage[hmargin=2.2cm,vmargin=2.2cm]{geometry}
+\usepackage[utf8x]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{amsmath} 
+\usepackage{amssymb} 
+\usepackage{dsfont}
+\usepackage{hyperref}
+\usepackage{algpseudocode}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+\usepackage{enumerate}
+\pagestyle{fancy}
+\headheight 15pt
+\lhead{Crpyto, Fall 2014}
+\rhead{Tomas Trnka}
+\begin{document}
+\section*{Exercise 10}
+\begin{enumerate}[a)]
+\item Another RSA 
+\begin{enumerate}[I.]
+\item Let's show in the first step, that in the group $\mathds{Z}^*_n$ exist such elements $g$ that have order $2p'q'$.
+
+The order of the group can be computed as $\varphi({n})$, but as the $n$ is compound number we will apply the rule for the Euler function:
+$$
+\varphi(n) = \varphi(p)\varphi(q)
+$$
+And because the $p$ and $q$ are primes we can compute the $\varphi(n)$ as:
+$$
+\varphi(p)\varphi(q) = (p-1)(q-1) = (2p'+1-1)(2q'+1-1) = 4p'q'
+$$
+Now what we have to do is to find a number $a$ in $\mathds{Z}^*_n$ that can be written as $a=b^2$ and we have element $a$ of desired order $2p'q'$.
+
+\item Then we are guaranteed to have a collision on $h(m)$. We use for this verification the Chinese remainder theorem:
+\begin{eqnarray*}
+y & \equiv & x \mod n \equiv \mod pq\\
+y & \equiv & x \mod p\\
+y & \equiv & x \mod q
+\end{eqnarray*}
+
+Since we have something that is in the form $g^m$ and we know the order of the $g$ we can assume that collision can occurred is only when the $m$ and distinct $m'$  can be written in form of
+\begin{eqnarray*}
+g^m &=& g^{m'} \\
+g^m &=& g^{r(2p'q') + t}\\
+g^{m'} &=& g^{r'(2p'q') + t}\\ 
+\end{eqnarray*}
+
+Now we can simply see that as both equation can be written in forms
+\begin{eqnarray*}
+g^m &=& g^{r(2p'q') + t} = g^{{(2p')}^{rq'}} g^t\\
+g^m &=& g^{r(2p'q') + t} = g^{{(2q')}^{rp'}} g^t\\
+\end{eqnarray*}
+
+And we know that $p$ and $q$ are primes therefore if we apply $\mod$ $p=2p'+1$ and $q=2'q+1$ to both equations we obtain
+\begin{eqnarray*}
+g^{{(2p')}^{rq'}} g^t \mod p \equiv g^{1^{rq'}} g^t \mod p \equiv g^t \mod p\\
+g^{{(2q')}^{rp'}} g^t \mod q \equiv g^{1^{rp'}} g^t \mod q \equiv g^t \mod q\\
+g^{{(2p')}^{r'q'}} g^t \mod p \equiv g^{1^{r'q'}} g^t \mod p \equiv g^t \mod p\\
+g^{{(2q')}^{r'p'}} g^t \mod q \equiv g^{1^{r'p'}} g^t \mod q \equiv g^t \mod q\\
+g^m = g^t = g^{m'} \mod p
+g^m = g^t = g^{m'} \mod q
+\end{eqnarray*}
+
+Therefore the Chinese reminder theorem must hold. We can obtain the multiple of the $2q'p'$ as:
+$$
+m-m' = r(2p'q') + t - (r'(2p'q') + t) = (2p'q')(r-r')
+$$
+
+Now when we have the multiple of the $\varphi(n)$. As the hint suggest when we have such number is easy to compute the original $n$. We can from the multiplier such $x$ and $y$ for $x^2 \equiv y^2 \mod n$ and afterwards discover the $p$ and $q$ as $p|(x+y)$ and $q|(x-y)$.
+\end{enumerate}
+\newpage
+
+\item Simplified Merkele-Damgård Theorem proof
+	
+We will prove it by contraposition. The contraposition says that if $h$ is not collision resistant then also the $compress$ function is not collision resistant. 
+
+Let's assume that we have found a collision on a $h(x)=h(y)$, where $x\neq y$.
+
+We know how that we obtained collision at the end, but since we know how the last value was computed we have to go back and see the step before the last one. If we encounter the collision at the step $g_{{k-1}_x}= g_{{k-1}_y}$ and at least one of the conditions $g_{{k-2}_y}\neq g_{{k-2}_y}, x_{k-2}\neq y_{k-2}$ holds true, then we found a collision and we are done.
+
+Otherwise if they are the same, ie. $g_{{k-2}_y}= g_{{k-2}_y}, x_{k-2} = y_{k-2} $ and we have to continue with the previous step. But the analysis what can happen in the previous step is the same as what he just have done, except the indexes. While undoing all the compression functions we must obtain a collision on $compress$ function or reach the first block of the message and realize, that since all the blocks of the message on the way "down" must have been the same, that our messages are the same. But this contradicts the assumption that we found a collision, ie. $y\neq x$.
+\end{enumerate}
+\end{document}
