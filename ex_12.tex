@@ -1,0 +1,78 @@
+% author: Tomas Trnka
+% mail: tomas@trnkatomas.eu
+% date: 2013-07-04
+
+\documentclass[a4paper,10pt]{article}
+%\usepackage[czech]{babel}
+%\usepackage[T1]{fontenc}
+\usepackage[hmargin=2.2cm,vmargin=2.2cm]{geometry}
+\usepackage[utf8x]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{amsmath} 
+\usepackage{amssymb} 
+\usepackage{dsfont}
+\usepackage{hyperref}
+\usepackage{algpseudocode}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+\usepackage{enumerate}
+\pagestyle{fancy}
+\headheight 15pt
+\lhead{Crpyto, Fall 2014}
+\rhead{Tomas Trnka}
+\begin{document}
+\section*{Exercise 12 - Altered ElGamal Signature}
+In altered ElGamal signature scheme we have got as a public key $G=\mathds{Z}^*_p,\alpha,\beta$ where $\left\langle \alpha \right\rangle = \mathds{Z}^*_p$ and $\beta = a^\alpha$. The secret key is $a$. After signing we obtain a signature in form of $(\gamma,\beta)$, where $\gamma = \alpha^\delta\beta^{\gamma' m} \mod p$ and $\gamma' = \gamma \mod p-1$.
+
+\begin{enumerate}[I]
+\item In the first step we should compare the method how the signature will computed in the altered scheme in comparison with the standard one. We will assume that $\gamma$ is created in the same way as in the standard scheme, ie. we choose at random some $k \in \mathds{Z}^*_{p-1}$ and create $\gamma$ as $\alpha^k \mod p$.
+
+Then will compute $\delta$ from the equation for verification:
+\begin{eqnarray*}
+\gamma &=& \alpha^\delta\beta^{\gamma'm} \mod p\\
+\alpha^k &=& \alpha^\delta\beta^{\gamma'm} \mod p\\
+\alpha^k &=& \alpha^\delta\alpha^{a\gamma'm} \mod p\\
+\end{eqnarray*}
+Since we are in group these two equation can be equal iff the exponents are the same, but for that purpose we have to use modulo of the order of the group, which is $p-1$:
+\begin{eqnarray*}
+k &=& \delta + a\gamma'm  \mod (p-1) \text{ but }\gamma\equiv\gamma' \mod (p-1) \\
+\delta &=& a\gamma m - k \mod (p-1)
+\end{eqnarray*}
+So we ended up with an equation that tells us how to compute the $\delta$. The equation for original ElGamal signature is $\delta = (x-a\gamma)k^{-1}$. So we can consider as an advantage that we don't have to compute the $k^{-1}$, which is not the easiest operation. 
+On the other hand in the modified scheme we have to multiply the message by two other numbers which can be costly, since in most cases we won't be able to avoid do the division $\mod (p-1)$. But what I consider as worse is, that if the adversary forge zero message, the $\delta$ will be only $k$. So in this case would be sufficient to just guess the $k$ so if we guess the $k$ we would be able to forge the signature without even knowing the $a$.
+
+\item In the second part we will show that this alternation is vulnerable to usage of the same key twice as the original signature.
+
+The situation is similar as for the standard ElGamal, if we use the same key $k$ twice we will end up with two pairs $(\gamma,\delta_1)$ and $(\gamma,\delta_2)$. We plug these results into the verification equation.
+\begin{eqnarray*}
+\alpha^k &=& \alpha^{\delta_1}\beta^{\gamma'm_1} \mod p\\
+\alpha^k &=& \alpha^{\delta_2}\beta^{\gamma'm_2}\mod p\\
+\alpha^{\delta_1}\beta^{m_1} &=& \alpha^{\delta_2}\beta^{ m_2}\mod p\\
+\alpha^{\delta_1}\alpha^{a m_1} &=& \alpha^{\delta_2}\alpha^{a 'm_2}\mod p\\
+\alpha^{\delta_1 + a m_1} &=& \alpha^{\delta_2 + a m_2}\mod p\\
+\end{eqnarray*}
+we use the same reasoning about the exponents as before:
+\begin{eqnarray*}
+\delta_1 + a m_1 &=& \delta_2 + a m_2 \mod (p-1)\\
+\delta_1 - \delta_2 &=& a (m_2 - m_1) \mod (p-1)\\
+\end{eqnarray*}
+And we can simply follow the procedure from Stinson's book, namely
+$$
+d = \gcd(m_2-m_1,p-1)
+$$
+Then create variables $m',\delta'$ and $p'$ as:
+\begin{eqnarray*}
+m' &=& \frac{m2-m1}{d} \\
+\delta' &=& \frac{\delta_1-\delta_2}{d}\\
+p' &=& \frac{p-1}{d}\\
+d' &=& am' \mod p'
+\end{eqnarray*}
+now we can compute the inverse of $m'$ as $\varepsilon$:
+\begin{eqnarray*}
+a &=& \varepsilon d' \mod(p')\\
+a &=& \varepsilon + ip' \mod(p-1)
+\end{eqnarray*}
+We can try possibilities for $i$ and we can easily verify if the current $a$ is the secret key, for example check if $\alpha^a = \beta$.
+\end{enumerate}
+\end{document}
