@@ -29,5 +29,14 @@
 \newcommand{\qb}[1]{\ensuremath{\vert{#1}\rangle}}
 \begin{document}
 \section*{Public-key crypto based on discrete logarithms}
+\begin{itemize}
+\item[] \textbf{The discrete log (DL) problem}\\
+Given a group $G$, generator $\alpha$, and $\beta \in G$, find integer $a$, such that $\alpha^a = \beta$. The DL problem is in many groups notoriously hard, for instance in $Z^{∗}_p$.
+\item[]\textbf{The Diffie-Hellman (DH) problem}\\
+Given a group $G$, generator $\alpha$, and $\alpha^a,\alpha^b$, where $a,b$ are randomly and independently chosen from $Z_t$, compute $\alpha^{ab}$.
+Clearly, if we could find a from $\alpha^a$, we could solve DH by a single exponentiation, so the DH problem is no harder than the DL problem. (polynomial reduction)
+\item[] \textbf{The Decisional Diffie-Hellman (DDH) problem}\\
+Given a group $G$, generator $\alpha$, and $\alpha^a,\alpha^b,\alpha^c$, where $a,b$ are randomly and independently chosen from $Z_t$; and where $c$ is chosen either as $c = ab$, or uniformly random from $Z_t$. Now guess which of the two cases we are in. Clearly, if you could solve DH, then you could solve DDH, by computing $\alpha{ab}$ and comparing this to $\alpha^c$. So we can say that DDH problem is no harder than the DH problem. (again reduction)
+\end{itemize}
 
 \end{document}
