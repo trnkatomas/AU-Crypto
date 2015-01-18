@@ -1,0 +1,118 @@
+% author: Tomas Trnka
+% mail: tomas@trnkatomas.eu
+% date: 2013-07-04
+
+\documentclass[a4paper,10pt]{article}
+%\usepackage[czech]{babel}
+%\usepackage[T1]{fontenc}
+\usepackage[hmargin=2.2cm,vmargin=2.2cm]{geometry}
+\usepackage[utf8x]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{fancyvrb}
+\usepackage{amsmath} 
+\usepackage{float}
+\usepackage{enumerate}
+\usepackage{tikz}
+\usepackage{hyperref}
+\pagestyle{fancy}
+\headheight 15pt
+\lhead{Crpyto, Fall 2014}
+\rhead{Tomas Trnka}
+\newcommand{\set}[1]{\ensuremath{\left\lbrace #1 \right\rbrace}}
+\newcommand{\role}[1]{\ensuremath{\left\langle #1 \right\rangle}}
+\newcommand{\cara}{\begin{center}\rule{140mm}{.2mm}\end{center}}
+\newcommand{\mI}{\ensuremath{^\mathcal{I}}}
+\newcommand{\Tbox}[1]{\ensuremath{\mathcal{T}}-Box#1}
+\newcommand{\Abox}[1]{\ensuremath{\mathcal{A}}-Box#1}
+\newcommand{\mC}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\Tc}{\ensuremath{\mathcal{T}_c}}
+\newcommand{\qb}[1]{\ensuremath{\vert{#1}\rangle}}
+\begin{document}
+\section*{Public-key crypto based on factoring}
+\subsection*{RSA}
+The basic definition is as follows
+\begin{itemize}
+\item Gen(K)
+\item generate k-bit primes p,q such that n=pq
+\item select $e \in N, gcd(e(p-1)(q-1))=1$
+\item compute $d = e^{-1} \mod (p-1)(q-1)$
+\item than we have public key (n,e), and secret key (n,d)
+\item $m \in Z_n E_{pk}(m) = m^e \mod n, D_{sk}(c) = c^d \mod n$
+\end{itemize}
+Why is this thing working? $c^d \equiv m^{e^d} \equiv m^{ed} \mod n$  according to Euler's totient function, $\varphi(n) = \varphi(p-1)\varphi(q-1)$.
+\begin{eqnarray*}
+x^{ed} \mod m &\equiv & x^{1 + h\varphi(n)} \mod n\\
+x x^{h^{\varphi(n)}} & \equiv & x1 \mod pq\\
+\end{eqnarray*}
+according to Chinese reminder theorem, the same for the second variable and according to the Chinese reminder theorem 
+\begin{eqnarray*}
+n &=& pq\\
+ab \mod n &=& c\\
+gcd(p,q) &=& 1\\
+a,b &\in & Z_n\\
+(a \mod p&,&a \mod q),(b \mod p,b \mod q)\\
+(ab \mod p&,&ab \mod q) = (c \mod p, c \mod q)
+\end{eqnarray*}
+\begin{eqnarray*}
+x^{ed} & \equiv & x^{(ed-1)}x \mod p\\
+ed &\equiv & 1 \mod(p-1)(q-1)\\
+ed - 1 &\equiv & t(p-1)(q-1) \mod (p-1)(q-1)\\
+x^{t(p-1)(q-1)}x & \equiv &  x^{(p-1)^{t(q-1)}}x = x\mod p \text{ Fermat little theorem}\\
+\end{eqnarray*}
+\begin{itemize}
+\item at most secure as factoring $\rightarrow$ polynomial reduction to factoring algorithm	
+\item defined by triplet (G,E,D)
+\item \textbf{G, algorithm for generating keys:}\\
+ This algorithm is probabilistic, takes a security parameter \textit{k} as inout and always outputs a pair of keys \textit{(pk,sk)}, the public and secret keys. We assume
+that from the public key one easily derive a description of $\mathcal{P}$, the set of plaintexts and $\mathcal{C}$, the
+set of ciphertexts. These do not have to be the same for every key.
+set of ciphertexts. These do not have to be the same for every key.
+\item 
+\textbf{E, algorithm for encryption:} this algorithm takes as input pk and $x \in P$ and produces as
+output $E_{pk}(x) \in \mathcal{C}$. Note that \textit{E} may be probabilistic, that is, even though we fix x and K, many
+different ciphertexts may be produced as output from E, as a result of random choices made during the encryption process. In other words, the ciphertext will have a probability distribution that is determined from \textit{x} and \textit{K}, typically uniform in some subset of the ciphertexts.
+\item
+\textbf{D, algorithm for decryption:}\\
+this algorithm takes as input $sk,y \in \mathcal{C}$ and produces as output $D_sk(y) \in \mathcal{P}$. It is allowed to be probabilistic, but is in most cases deterministic.
+\end{itemize}
+\begin{itemize}
+\item Trapdoor one-way function -- the principle why this is working
+\item the easiest description of RSA:\\
+The public encryption key is \textit{pk = (n,e)}, while the secret decryption key is \textit{sk = (n,d)} The
+set of plaintexts and the set of ciphertexts are the equal, namely P = C = Zn. And finally, the encryption operation is $E_{pk}(x) = xe \mod n$, while $D_{sk}(y) = yd\mod n$.
+\end{itemize}
+\textbf{Definition 3.} We will say that the system \textit{(G,E,D)} forms a family of trapdoor one-way functions
+if the following is satisfied:
+\begin{itemize}
+\item
+The algorithms \textit{(G,E,D)} defining the system all run in time polynomial in the security parameter \textit{k}.
+\item 
+Let any probabilistic polynomial time algorithm A be given. Consider the following experiment:
+we run G on input k, let (pk,sk) be the output. Then we select x at random in the set of
+plaintexts P and finally we run A on input pk,Epk(x), i.e. we give A the public key and the
+encryption of a random plaintext. Let p(A,k) be the probability that A outputs x. Then we
+require that for any A, p(A,k) is negligible in k.
+A probability $\epsilon(k)$ that depends on k is negligible if it holds that for any polynomial f, we have
+$\epsilon(k) ≤ 1/f(k)$ for all large enough k. In other words, asymptotically in k, it vanishes to zero
+very quickly. This is a complexity theoretic way to say that “for all practical purposes”, the
+probability might as well have been zero.
+\end{itemize}
+Definition of security for such system
+\begin{itemize}
+\item[] \textbf{The ideal world:}\\
+Input to both adversary A and oracle O is the security parameter k. The oracle runs G(k) to get (pk,sk) and gives pk to A. A computes a plaintext x ∈ P and gives it to O. The oracle responds with $E_{pk}(r)$, where r is randomly chosen in P of the same length as x.
+Finally A outputs a bit b.
+
+\item[] \textbf{The real world:}\\
+Input to both adversary A and oracle O is the security parameter k. The oracle runs G(k) to get (pk,sk) and gives pk to A. A computes a plaintext x ∈ P and gives it to O.
+The oracle responds with $E_{pk}(x)$. Finally A outputs a bit b.	
+\end{itemize}
+We define $p_{A,ideal}(k) (p_{A,real}(k))$ to be the probability that A outputs 1 in the ideal world (the real world) on input k, and the advantage of A to be
+$$
+Adv_A(k) = |p_{A,ideal}(k) - p_{A,real}(k)|
+$$
+
+
+TODO take pictures of the security things from notes - and be able to explain it
+add the primality testing -- Miler-Rabin test, I think it is important because otherwise you don't know how to generate the most crucial part of RSA
+\end{document}
