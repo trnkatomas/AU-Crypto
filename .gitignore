@@ -107,3 +107,9 @@ sympy-plots-for-*.tex/
 
 # xindy
 *.xdy
+
+# vlna a jine temporary hnusy
+*.aux
+*.docx
+*.log
+*.gz
