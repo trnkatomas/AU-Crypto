@@ -29,6 +29,20 @@
 \newcommand{\qb}[1]{\ensuremath{\vert{#1}\rangle}}
 \begin{document}
 \section*{Perfect Security and Information Theory}
+\subsection{Security}
+\begin{itemize}
+\item \textbf{computational security}\\ it concerns only about computational effort that is required to break a cryptosystem, it means that solve such task one needs at least N operations that are not solvable by current machines in reasonable time. This measure does not guarantee against other attacks.
+\item \textbf{provable security}\\
+this measure is sort of comparison against well known problem where we know how difficult they are, it somewhat similar to polynomial reduction when we say that this task is at least as difficult as NP.
+\item \textbf{unconditional security}
+unconditional security is such a security that cannot be broken even with infinite computational resources
+\end{itemize}
+\subsection*{Probability}
+Unconditional security can be studied from the point of view of probability.
+Discrete random variable is
+$$
+0 \leq Pr[X=x], \sum_{x \in X} Pr[X=x] = 1
+$$
 
-
+Multiple random variable, suppose there exist $X$ and $Y$ random variables then we can define \textit{joint} and \textit{conditional} probability
 \end{document}
