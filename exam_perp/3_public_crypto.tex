@@ -112,7 +112,59 @@ $$
 Adv_A(k) = |p_{A,ideal}(k) - p_{A,real}(k)|
 $$
 
+But since the RSA system is deterministic we clearly can do such think - the adversary can compute everything by itself and the compare to the results.
 
-TODO take pictures of the security things from notes - and be able to explain it
-add the primality testing -- Miler-Rabin test, I think it is important because otherwise you don't know how to generate the most crucial part of RSA
+However, it is possible to use deterministic systems to build new ones that do have this type
+of security. Let us take RSA as an example. Let (G,D,E) be the following public-key system: G
+simply generates a pair of RSA keys (n,e), (n,d) in the usual way. However, the set of messages
+is just {0,1} whereas the set of ciphertexts is $Z^{∗}_n$. The encryption algorithm E will encrypt a bit b
+by choosing a random number $x_b \in Z^{∗}_n$ such that the least significant bit of $x_b$ is b. The ciphertext is now $c = x^e_b \mod n$. Decryption is straightforward: reconstruct $x_b$ using the secret RSA key and extract the least significant bit.
+
+\subsection*{Key generation}
+To get our cryptosystem working we need to have fairly large prime numbers (in order of thousands bits). 
+\subsubsection*{Miller-Rubin primality test}
+We test some odd number x
+\begin{enumerate}
+\item choose $r \in_R Z_x$
+\item $gcd(r,x) \neq 1$, reject
+\item $x-1 = 2^a\cdot b$, from fermat little theorem $k^(l-1) = 1 \mod l$
+\item iterate $r^{2b},r^{2^2b},r^{2^3b}$
+\item if there is -1 in the list then accept, also $r^b \mod x = 1$ yield accept
+\end{enumerate}
+
+\subsection*{Chosen Ciphertext Security}
+There are discussions whether we are not giving the adversary too much power - but the reality denies such worries. It was the case for SSL-PCKS\#1. We again have:
+\begin{itemize}
+\item
+\textbf{The ideal world:}\\ Input to both adversary A and oracle O is the security parameter k. The oracle
+runs G(k) to get (pk,sk) and gives pk to A. A may now submit an input string y to O, and
+O will return Dsk(y) to A. This is repeated as many time as A wants. Then A computes a
+plaintext x ∈ P and gives it to O. The oracle responds with y0= Epk(r), where r is randomly
+chosen in P of the same length as x. A may now again submit an input string y to O, the only
+restriction is that y must be different from y0. O will return Dsk(y) to A. This is repeated as
+many time as A wants.Finally A outputs a bit b.
+\item
+\textbf{The real world:}\\ Input to both adversary A and oracle O is the security parameter k. The oracle
+runs G(k) to get (pk,sk) and gives pk to A. A may now submit an input string y to O, and
+O will return Dsk(y) to A. This is repeated as many time as A wants. Then A computes a
+plaintext x ∈ P and gives it to O. The oracle responds with y0= Epk(x). A may now again
+submit an input string y to O, the only restriction is that y must be different from y0. O will
+return Dsk(y) to A. This is repeated as many time as A wants.
+Finally A outputs a bit b.
+\end{itemize}
+We define pA,ideal(k),pA,real(k) as for semantic security, and the advantage of A to be
+$$Adv_A(k) = |pA,ideal(k) − pA,real(k)|$$
+Definition 5. We say that (G,E,D) is chosen ciphertext (CCA)-secure, if for all probabilistic polynomial time adversaries A, it holds that $Adv_A(k)$ is negligible in k.
+
+This unfortunately lead to very inefficient  systems - therefore we will introduce OAEP - Optimal asymmetric encryption padding) - Basic idea of this is map all the strings from large pool P into much smaller P - which give the adversary no additional information.
+\begin{enumerate}
+\item Choose $r \in {0,1}^{k_0}$ at random.
+\item Compute $s = G(r) ⊕ (m||0^{k_1})$, t = H(s) ⊕ r, w = s$||$t, where $||$ means concatenation of strings.
+\item  Let the ciphertext be $E_{pk}(w)$.
+\end{enumerate}
+No method of the OAEP type have been proved secure in the sense that their security follows
+only only from the RSA assumption, for instance. The problem is that it seems very difficult to
+design the encoding method such that one can prove that it is hard to generate legal ciphertexts
+wihtout knowing the plaintext. But they can nevertheless be quite adequate in practice, and OAEP is a part of many international standards for encryption, particularly in connection with RSA.
+
 \end{document}
