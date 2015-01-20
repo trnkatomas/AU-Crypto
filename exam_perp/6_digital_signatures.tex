@@ -29,6 +29,102 @@
 \newcommand{\qb}[1]{\ensuremath{\vert{#1}\rangle}}
 \begin{document}
 \section*{Digital signatures}
+Digital Signature System $(G, S, V)$ is defined by probabilistic key gen. alg \textit{I} which takes \textit{k} and generates the $(pk,sk)$. Algorithm A gets \textit{k} and \textit{m} and produces $S_{sk}(m)$. Then $V$ gets $s,m,pk$ and outputs \textit{accept} or \textit{reject}. It is required to obtain always accept.
+There is difference between MACs - because while using MAC we cannot be sure who sent the message.
+
+\subsection*{Security}
+The oracle runs G on input k to get $sk,pk$. We give pk to the adversary E,
+and keep sk inside the oracle. The adversary can submit as many messages
+as he wants and for each message m he will get $S_sk(m)$ back.
+The adversary wins the game if he produces $m_0,s_0$, such that $m_0$ is not one
+of the messages the oracle was asked to sign, and that $V_{pk}(s_0,m_0) = accept$.
+The probability that E wins is a function of the security parameter k and is
+called $Adv_E(k)$.
+
+\noindent
+\textbf{Definition 3} (Security for Signature Schemes) We say that a signature scheme is CMA-secure if for any probabilistic polynomial time adversary $E, Adv_E(k)$ is negligible as a function of k. This is the strongest sense in which a signature system can be secure.
+
+\subsection*{Plain RSA and El Gamal Signatures}
+\subsubsection*{RSA}
+An example would be plain RSA signatures, where the key generation
+is the same as in the RSA cryptosystem, so $sk = (n,e),pk = (n,d)$ and
+$P = A = Z_n$. Here, k is usually the bit length of the modulus n. The
+signature on message \textit{m} is $s = m^d\mod n$, and to verify s, one checks that
+$s^e\mod n = m$. 
+\subsubsection*{El Gamal}
+Let \textit{p} be a prime such that the discrete log problem in $Z_p$ is intractable and let $\alpha \in Z^{*}_p$ be a primitive element. Let $P = Z^{*}_p, A=Z_p^{*}xZ_{p-1}$ and define $$
+K = \{ (p,\alpha,a,\beta) : \beta \equiv \alpha^a (mod p)\}.
+$$
+The values $p,\alpha,\beta$ are the public key ad \textit{a} is a private key. For $K=(p,\alpha,a,\beta)$ and for secret random number $k \in Z_{p-1}^{*}$, define
+$$
+sig_K(x,k) = (\gamma,\delta)
+$$
+where $\gamma = \alpha^a \mod p$ and $\delta = (x-a\gamma)k^{-1} \mod (p-1)$. For $x,\gamma \in Z_p^{*}, \delta \in Z_{p-1}$ define
+$$
+ver_K(x,(\gamma,\delta))) = true \leftrightarrow \beta^\gamma\gamma^\delta \equiv \alpha^x (\mod p)
+$$
+
+In this system we can create existential forgery - i.e. we are able to create some $\gamma,\delta,x$ that will be a valid signature for some $x'$. We are also not allowed to use the same key for more than one message.
+
+These systems are never used in practice, first reason is that as message grows it is more complicated to create a signature. Moreover none of them satisfy the security property - RSA can be computed directly and for El Gamal with more complicated process we can create a valid signature from old ones. The solution is to use fast a collision resistant function \textit{h}.
+
+For RSA, this trivially follows from the multiplicative property: given public key n,e and signatures $s_1 = m^d_1
+\mod n,s_2= m^d_2 \mod n$ on messages m1,m2, one can easily compute the signature $s_1s_2\mod n$ on a new message $m_1m_2\mod n$, since $s_1s_2= (m_1m_2)^d\mod n$.
+
+\subsection*{Signature scheme with hash function}
+Instead of encoding the whole message we take a hash collision resistant function and we hash the message. Then ma be will be necessary to pad the hash.
+Then if the adversary would like to use multiplicative constant for the RSA he will be facing the situation find a preimage of hashed function.
+$$
+pad(h(m)), pad^{−1}(pad(h(m1))pad(h(m2)) mod n).
+$$
+
+The best what we have in real time world is that if both the parts were secure then their product will be secure as well.
+
+\noindent
+\textbf{Theorem} If H is collision intractable and $\Sigma$ is secure, then $\Sigma'$ is secure.
+
+To prove the theorem, we assume that there is an enemy E' that breaks
+$\Sigma'$ under a chosen message attack.
+
+Consider the following algorithm E: it gets as input a hash function h,
+a public key pk from $\Sigma$, and an oracle O that on input a message x returns
+the $\Sigma$-signature $A_sk(x)$, where sk is the secret key corresponding to pk, i.e.
+E gets to do a chosen message attack on $\Sigma$.
+Now E does the following:
+\begin{itemize}
+\item It starts E' on input pk,h (this is a public key in the combined scheme
+$\Sigma'$).
+\item When E' makes an an oracle call, i.e. it wants the $\Sigma'$ signature on
+a message m, this is handled by computing h(m), calling O on input
+h(m) and returning to E' the result $A_{sk}(h(m))$.
+\item When E' outputs a message m' and a signature s', E also outputs these
+values, plus the set of messages M for which E' made oracle calls.
+\end{itemize}
+
+The fact that E' by assumption is successful with large (non-negligible)
+probability means that there is a good chance that $m \notin  M$, and that s' is a valid $\Sigma$-signature on h(m'). Given that this happens, either $h(m') \in h(M')$
+or $h(m') \notin h(M')$ so at least one of these cases must occur with non-negligible
+probability.
+\begin{enumerate}
+\item If $h(m') \notin h(M')$, we have forged the $\Sigma$-signature on a new message h(m') : we never asked O for a signature on h(m').
+\item If $h(m') \in h(M')$, we have found a collision for h.
+It follows that the assumption that E' break $\Sigma'$ leads to a contradiction with at least on of the assumptions in the theorem.
+\end{enumerate}
+
+\subsection*{One-time signatures}
+One time signature is Lompart-Diffie. We create
+$
+sk = (x_0,x_1), pk = (f(x_0),f(x_1))
+$ then according to the hash of the message we create the signature consisting of the parts of the secret key - verification is just compare the hashes and compare them with the public key. This will work just for the first time, but in case we would like to do it again it is completely insecure. 
+
+\subsection*{CR hasehes implies the signatures}
+This is weaker then stronger that one-way functions will be sufficient.  The example is Lompart-Diffie scheme.
 
 
+\subsection*{Replay attacks}
+Surely we have shown that there is a possibility that we can verify the message, but what we can not do is to ensure that the eavesdropper on the line will not reorder the messages or will not send them more then once - these possibilities are called - replay attacks. 
+
+The simplest way how to avoid is to ensure that no two messages are the same. It means that we prepend some kind of counter, sequence number - this will allow to filter our replayed messages and order them correctly. But we have to be careful - sometimes the messages can get lost even without the presence of attacker, so the most practical implementation is to use limitation that the sequence number must be bigger than the last one.
+
+Timestamps are the other approach. What we have to do is just ensure that the senders and receivers times do not differ too much - for this we would incorporate some kind of synchronization. We also have to know that the messages will be delivered reasonably quickly, These are the drawbacks but on the other hand we do not have to store, sequences, previous messages and so long...	
 \end{document}

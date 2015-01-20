@@ -114,4 +114,10 @@ The conditional entropy measures the average amount of information about X that 
 
 
 \section*{Spurious Keys and Unicity Distance}
+Spurious key are such keys that we are left with after we have ruled out many keys that would provide incorrect decryption. We would like to bound the amount of spurious keys. We at first define the entropy for the whole \mc{C} per letter.\\
+\includegraphics[width=\textwidth]{entropy.jpg}
+The unicity distance of a cryptosystem is defined to be the value of $n$, denoted by $i$ at which the expected number of spurious keys become zero, i.e. the average amount of ciphertext required for an opponent to be abel to uniquely compute the key, given enough computing time.
+\includegraphics[width=\textwidth]{unicity_distance.jpg}
+\subsection*{Product cryptosystems}
+For some of them it just does not make sense, the most common used combination is shift and permutation. Some of these compound ciphers can be iterated to obtain better security. Examples useles (two affine ciphers, two shift ciphers).
 \end{document}
