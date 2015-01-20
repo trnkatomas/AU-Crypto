@@ -1,0 +1,272 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     10528,        263]
+NotebookOptionsPosition[     10180,        246]
+NotebookOutlinePosition[     10515,        261]
+CellTagsIndexPosition[     10472,        258]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"numberOfDivisions", "[", 
+   RowBox[{"n_", ",", "k_"}], "]"}], " ", ":=", " ", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{"2", "^", "n"}], ")"}], "-", "2", "+", "k", "+", 
+   RowBox[{
+    RowBox[{"k", "/", "n"}], "*", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"2", "^", "n"}], "-", "1"}], ")"}], "/", 
+     RowBox[{"(", 
+      RowBox[{"2", "^", "n"}], ")"}]}]}]}]}]], "Input",
+ CellChangeTimes->{{3.624692650846624*^9, 3.624692655371222*^9}, {
+   3.6246929537894707`*^9, 3.6246929559971533`*^9}, {3.624693069698266*^9, 
+   3.624693071913588*^9}, 3.6246956343459578`*^9, {3.62481380407463*^9, 
+   3.624813823143979*^9}, {3.624813856390028*^9, 3.6248138761690283`*^9}, {
+   3.624813914590097*^9, 3.624813933069659*^9}, {3.624814050449544*^9, 
+   3.624814058907364*^9}, {3.62481410806638*^9, 3.624814111697619*^9}, {
+   3.624943011751124*^9, 3.624943025100346*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"nLimit", " ", "=", " ", "10"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"table", "=", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"numberOfDivisions", "[", 
+        RowBox[{"n", ",", "k"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"n", ",", "1", ",", "nLimit"}], "}"}]}], "]"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"minN", " ", "=", " ", 
+     RowBox[{
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Position", "[", 
+        RowBox[{"table", ",", 
+         RowBox[{"Min", "[", "table", "]"}]}], "]"}], "]"}], "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", "\t", 
+    RowBox[{"Show", "[", "\[IndentingNewLine]", "\t\t", 
+     RowBox[{
+      RowBox[{"Plot", "[", 
+       RowBox[{
+        RowBox[{"numberOfDivisions", "[", 
+         RowBox[{"n", ",", "k"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"n", ",", "1", ",", "nLimit"}], "}"}]}], "]"}], ",", 
+      "\[IndentingNewLine]", "\t\t", 
+      RowBox[{"Epilog", " ", "\[Rule]", " ", 
+       RowBox[{"{", "\[IndentingNewLine]", "\t\t\t", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"PointSize", "[", "Large", "]"}], ",", "Blue", ",", 
+           RowBox[{"Tooltip", "[", 
+            RowBox[{
+             RowBox[{"Point", "[", 
+              RowBox[{"{", 
+               RowBox[{"n", ",", 
+                RowBox[{"numberOfDivisions", "[", 
+                 RowBox[{"n", ",", "k"}], "]"}]}], "}"}], "]"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"n", ",", 
+               RowBox[{
+                RowBox[{"numberOfDivisions", "[", 
+                 RowBox[{"n", ",", "k"}], "]"}], "//", "N"}]}], "}"}]}], 
+            "]"}], ",", 
+           RowBox[{"Text", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"n", ",", 
+               RowBox[{
+                RowBox[{"numberOfDivisions", "[", 
+                 RowBox[{"n", ",", "k"}], "]"}], "//", "N"}]}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"n", "+", "1"}], ",", 
+               RowBox[{
+                RowBox[{"numberOfDivisions", "[", 
+                 RowBox[{"n", ",", "k"}], "]"}], "//", "N"}]}], "}"}]}], 
+            "]"}]}], "}"}], ",", ",", "\[IndentingNewLine]", "\t\t\t", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"PointSize", "[", "Large", "]"}], ",", "Red", ",", 
+           RowBox[{"Tooltip", "[", 
+            RowBox[{
+             RowBox[{"Point", "[", 
+              RowBox[{"{", 
+               RowBox[{"minN", ",", 
+                RowBox[{"numberOfDivisions", "[", 
+                 RowBox[{"minN", ",", "k"}], "]"}]}], "}"}], "]"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"minN", ",", 
+               RowBox[{
+                RowBox[{"numberOfDivisions", "[", 
+                 RowBox[{"minN", ",", "k"}], "]"}], "//", "N"}]}], "}"}]}], 
+            "]"}], ",", 
+           RowBox[{"Text", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"minN", ",", 
+               RowBox[{
+                RowBox[{"numberOfDivisions", "[", 
+                 RowBox[{"minN", ",", "k"}], "]"}], "//", "N"}]}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"minN", ",", 
+               RowBox[{
+                RowBox[{"2", "*", 
+                 RowBox[{"numberOfDivisions", "[", 
+                  RowBox[{"minN", ",", "k"}], "]"}]}], "//", "N"}]}], "}"}]}],
+             "]"}]}], "}"}]}], "\[IndentingNewLine]", "\t\t\t\t", "}"}]}]}], 
+     "\[IndentingNewLine]", "\t\t", "]"}]}], ",", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"k", ",", "1000"}], "}"}], ",", "1", ",", "2000", ",", "1", ",", 
+     RowBox[{"Appearance", "\[Rule]", "\"\<Labeled\>\""}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"n", ",", "1", ",", "10", ",", "1", ",", 
+     RowBox[{"Appearance", "\[Rule]", "\"\<Labeled\>\""}]}], "}"}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->CompressedData["
+1:eJwdz1sogwEUB/APKZcVsUzUZFm+9sRyzS1ELJSlz4NLkhEy5mFW2JvlMlt5
+kAdSQllo01ZoSQmjRLYUqbmzlKS5a9n/PJx+df6df53E5m65IpBhGJF/4Ea4
+qW4s4LmQL2ZboVXDKeErP1IFnSnTg/Cn5UwLL+M4HWx0tZMvXwo9TLVqSc2i
+cxb6Dv7I4P79a+qvrr+DuQ2rQj3uvJIEmMxPixz3a+cmo2BpiiYGFmUwQpik
+LRXBqoiZJJgeeiKBW5ylGHriF2RwKtpLRg1w1TAs20gadLJmeFF+o4ChrKgT
+atZuVXBlXtYHcz1Kkp2QzkGBMYfk9WaZoWv00QaXhgSblG/a7JRLDNswzhy8
+Cx/sXgd0j94eUl/N8Y4B/6gjdqGUnTiFvKdl8mQ97xKeFSkeoaiJfYG1R+5v
+2sdfMUa/q2/3QdDUEx4CP3x5pGBaHQuvKvVCWOZ7F8Pv8wop3Jvqyod6S1gB
+7JA7SkjlL1k2POJ0+DVnPpGLv4LoT8hrI/8B6kj5rQ==
+  "]],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`k$$ = 2000, $CellContext`n$$ = 1, 
+    Typeset`show$$ = True, Typeset`bookmarkList$$ = {}, 
+    Typeset`bookmarkMode$$ = "Menu", Typeset`animator$$, Typeset`animvar$$ = 
+    1, Typeset`name$$ = "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`k$$], 1000}, 1, 2000, 1}, {
+      Hold[$CellContext`n$$], 1, 10, 1}}, Typeset`size$$ = {
+    360., {113., 117.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`k$1061$$ = 
+    0, $CellContext`n$1062$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`k$$ = 1000, $CellContext`n$$ = 1}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`k$$, $CellContext`k$1061$$, 0], 
+        Hold[$CellContext`n$$, $CellContext`n$1062$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, 
+      "Body" :> ($CellContext`nLimit = 10; $CellContext`table = Table[
+          $CellContext`numberOfDivisions[$CellContext`n$$, $CellContext`k$$], \
+{$CellContext`n$$, 1, $CellContext`nLimit}]; $CellContext`minN = Part[
+          Flatten[
+           Position[$CellContext`table, 
+            Min[$CellContext`table]]], 1]; Show[
+         Plot[
+          $CellContext`numberOfDivisions[$CellContext`n$$, $CellContext`k$$], \
+{$CellContext`n$$, 1, $CellContext`nLimit}], Epilog -> {{
+            PointSize[Large], Blue, 
+            Tooltip[
+             Point[{$CellContext`n$$, 
+               $CellContext`numberOfDivisions[$CellContext`n$$, \
+$CellContext`k$$]}], {$CellContext`n$$, 
+              N[
+               $CellContext`numberOfDivisions[$CellContext`n$$, \
+$CellContext`k$$]]}], 
+            Text[{$CellContext`n$$, 
+              N[
+               $CellContext`numberOfDivisions[$CellContext`n$$, \
+$CellContext`k$$]]}, {$CellContext`n$$ + 1, 
+              N[
+               $CellContext`numberOfDivisions[$CellContext`n$$, \
+$CellContext`k$$]]}]}, Null, {
+            PointSize[Large], Red, 
+            Tooltip[
+             Point[{$CellContext`minN, 
+               $CellContext`numberOfDivisions[$CellContext`minN, \
+$CellContext`k$$]}], {$CellContext`minN, 
+              N[
+               $CellContext`numberOfDivisions[$CellContext`minN, \
+$CellContext`k$$]]}], 
+            Text[{$CellContext`minN, 
+              N[
+               $CellContext`numberOfDivisions[$CellContext`minN, \
+$CellContext`k$$]]}, {$CellContext`minN, 
+              N[
+              2 $CellContext`numberOfDivisions[$CellContext`minN, \
+$CellContext`k$$]]}]}}]), 
+      "Specifications" :> {{{$CellContext`k$$, 1000}, 1, 2000, 1, Appearance -> 
+         "Labeled"}, {$CellContext`n$$, 1, 10, 1, Appearance -> "Labeled"}}, 
+      "Options" :> {}, "DefaultOptions" :> {}],
+     ImageSizeCache->{407., {169., 176.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{
+  3.624695446211687*^9, {3.624695543514044*^9, 3.6246955682021027`*^9}, 
+   3.624695613351968*^9, 3.624695693541808*^9, 3.624695761588571*^9, 
+   3.6246958762868757`*^9, 3.624696012967279*^9, 3.6246960537788477`*^9, 
+   3.624696118396242*^9, 3.624696211673304*^9, 3.624696314901533*^9, 
+   3.624696370454444*^9, 3.62480201389564*^9, {3.6248073191029997`*^9, 
+   3.6248073330734987`*^9}, 3.624813831886338*^9, 3.6248138654206867`*^9, 
+   3.624814239635404*^9, 3.624908916594358*^9, {3.624908948545867*^9, 
+   3.624908956492681*^9}, 3.624941550777199*^9, 3.6249428802328033`*^9, 
+   3.624943029028062*^9, 3.624943077609035*^9}]
+}, Open  ]]
+},
+WindowSize->{838, 999},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
+FrontEndVersion->"9.0 for Linux x86 (64-bit) (November 20, 2012)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 916, 21, 32, "Input"],
+Cell[CellGroupData[{
+Cell[1498, 45, 4642, 112, 485, "Input"],
+Cell[6143, 159, 4021, 84, 394, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
