@@ -57,11 +57,12 @@ Pr[x|y] = \frac{Pr[x]Pr[y|x]}{Pr[y]}
 $$
 They are independent iff $Pr[x|y]=P[x]$
 \subsection*{Perfect secrecy}
-\textbf{Definition} A cryptosystem has \textit{perfect secrecy} if Pr[x|y] = Pr[x] for all $x \in \mathcal{P}, y \in \mathcal{C}$.
+\textbf{Definition} A cryptosystem has \textit{perfect secrecy} if $\Pr[x|y] = Pr[x]$ for all $x \in \mathcal{P}, y \in \mathcal{C}$.
 
 \noindent
 \textbf{Theorem} Suppose $(\mc{P},\mc{C},\mc{K},\mc{E},\mc{D})$ is a cryptosystem where $|\mc{K}| = |\mc{C}| = |\mc{P}|$. Then the cryptosystem provides perfect secrecy iff every key is used with probability $\frac{1}{\mc{K}}$ and for every $x \in \mc{P}, y \in \mc{C}$, there is unique key K such that $e_K(x) = y$.
 
+With this framework we can prove that shift cipher is unbreakable if we you new key for every new letter in the message. It follows from the definition, we also have to use Bayes theorem.
 \subsubsection*{Application as one-time pad}
 This system was believed as unbreakable but the proof comes just out of the Shannon theorem. The major drawback is that the key must be as long as the message and moreover that the key can be used only once. 
 
@@ -116,7 +117,7 @@ The conditional entropy measures the average amount of information about X that 
 \section*{Spurious Keys and Unicity Distance}
 Spurious key are such keys that we are left with after we have ruled out many keys that would provide incorrect decryption. We would like to bound the amount of spurious keys. We at first define the entropy for the whole \mc{C} per letter.\\
 \includegraphics[width=\textwidth]{entropy.jpg}
-The unicity distance of a cryptosystem is defined to be the value of $n$, denoted by $i$ at which the expected number of spurious keys become zero, i.e. the average amount of ciphertext required for an opponent to be abel to uniquely compute the key, given enough computing time.
+The unicity distance of a cryptosystem is defined to be the value of $n$, denoted by $i$ at which the expected number of spurious keys become zero, i.e. the average amount of ciphertext required for an opponent to be able to uniquely compute the key, given enough computing time.\\
 \includegraphics[width=\textwidth]{unicity_distance.jpg}
 \subsection*{Product cryptosystems}
 For some of them it just does not make sense, the most common used combination is shift and permutation. Some of these compound ciphers can be iterated to obtain better security. Examples useles (two affine ciphers, two shift ciphers).

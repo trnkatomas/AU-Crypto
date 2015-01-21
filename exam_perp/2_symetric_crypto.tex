@@ -32,7 +32,7 @@
 A cryptosystem is a triple (G,E,D):
 \begin{itemize}
 \item[G] algorithm for generating keys: This algorithm is probabilistic, takes no input and always outputs a key K, we may think of the key simply as strings of bits. For symmetric cryptosystems, the key K is used for both encryption and decryption. usually fixed sets P, C. Often uniformly $k \in K, P=C$.
-\item[E] algorithm for encryption: $K, x \in P \rightarrow EK(x) \in C$. Note that E may be probabilistic, that is, even though we fix x and K, many different ciphertexts may be produced as output from E, as a result of random choices made during the encryption process. In other words, the ciphertext will have a probability distribution that is
+\item[E] algorithm for encryption: $K, x \in P \rightarrow E_K(x) \in C$. Note that E may be probabilistic, that is, even though we fix x and K, many different ciphertexts may be produced as output from E, as a result of random choices made during the encryption process. In other words, the ciphertext will have a probability distribution that is
 determined from x and K, typically uniform in some subset of the ciphertexts. 
 \item[D] algorithm for decryption: this algorithm takes as input $K,y \in C$ and produces as output
 $D_K(y) \in P$. It is allowed to be probabilistic, but is in most cases deterministic.
@@ -79,6 +79,23 @@ High level description - should explain the picture
 \subsection*{Linear cryptoanalysis}
 \subsection*{Differential cryptoanalysis}
 \subsection*{Security definitions}
+The deterministic cryptosystem has a disadvantage that whatever we will send through them they will always output the same, given key and the plaintext.
+
+\noindent
+\textbf{Definition (PRF security)} We say that ${f_K| K \in {0,1}^k}$ is a $(t,q,\varepsilon)$-secure pseudorandom function family (PRF), if any adversary that runs in time at most t, and makes at most q calls to the oracle, has advantage at most $\varepsilon$.
+$$
+AdvA= |p(A,real) − p(A,ideal)|
+$$
+
+\noindent
+\textbf{Definition (CPA-security)} We say the cryptosystem $(G,E,D)$
+is $(t,q,\mu,\varepsilon)$-secure, if any adversary that runs in time at most t, and makes at most q calls to the
+oracle, with plaintexts consisting of a total of $\mu$ bits, has advantage at most $\varepsilon$.
+Probabilities and running times can be formalized in the same as we explained in the previous
+
+
+
+
 \includegraphics[width=0.5\textwidth]{PRF_security.jpg}
 \includegraphics[width=0.5\textwidth]{CPA_security.jpg}
 \subsection*{CBC and CTR}

@@ -29,6 +29,7 @@
 \newcommand{\qb}[1]{\ensuremath{\vert{#1}\rangle}}
 \begin{document}
 \section*{Public-key crypto based on factoring}
+This section relies on something called one-way trapdoor fucntions, unfortunately these functions are not proven to be unconditionally secure and therefore the security is concern about only computational security.
 \subsection*{RSA}
 The basic definition is as follows
 \begin{itemize}
@@ -120,6 +121,13 @@ simply generates a pair of RSA keys (n,e), (n,d) in the usual way. However, the 
 is just {0,1} whereas the set of ciphertexts is $Z^{∗}_n$. The encryption algorithm E will encrypt a bit b
 by choosing a random number $x_b \in Z^{∗}_n$ such that the least significant bit of $x_b$ is b. The ciphertext is now $c = x^e_b \mod n$. Decryption is straightforward: reconstruct $x_b$ using the secret RSA key and extract the least significant bit.
 
+\subsection*{Attacks}
+Quadratic sieve method - factoring N\\
+\includegraphics[width=0.5\textwidth]{rsa_attack.jpg}\\
+Peter Shor's quantum
+Number Field Sieve
+Time attacks
+
 \subsection*{Key generation}
 To get our cryptosystem working we need to have fairly large prime numbers (in order of thousands bits). 
 \subsubsection*{Miller-Rubin primality test}
@@ -127,10 +135,13 @@ We test some odd number x
 \begin{enumerate}
 \item choose $r \in_R Z_x$
 \item $gcd(r,x) \neq 1$, reject
-\item $x-1 = 2^a\cdot b$, from fermat little theorem $k^(l-1) = 1 \mod l$
+\item $x-1 = 2^a\cdot b$, from fermat little theorem $k^{(l-1)} = 1 \mod l$
 \item iterate $r^{2b},r^{2^2b},r^{2^3b}$
 \item if there is -1 in the list then accept, also $r^b \mod x = 1$ yield accept
 \end{enumerate}
+
+\subsection*{Information about certain bits}
+One can by dividing $\frac{e_K(x)}{n} = \left(\frac{x}{n}\right)^b = \frac{x}{n}$ obtain parity of the last bit in plain text - therefore OAEP.
 
 \subsection*{Chosen Ciphertext Security}
 There are discussions whether we are not giving the adversary too much power - but the reality denies such worries. It was the case for SSL-PCKS\#1. We again have:
